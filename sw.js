@@ -1,5 +1,5 @@
-// オフラインで遊べるようにファイルを保存しておく
-const CACHE = 'amamatch-v1';
+// オフラインでも遊べるようにファイルを保存。ネットにつながるときは最新版を取りにいく
+const CACHE = 'amamatch-v2';
 const FILES = ['./', 'index.html', 'manifest.json', 'icon.svg'];
 
 self.addEventListener('install', e => {
@@ -10,6 +10,12 @@ self.addEventListener('activate', e => {
     .then(() => self.clients.claim()));
 });
 self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET') return;
-  e.respondWith(caches.match(e.request).then(hit => hit || fetch(e.request)));
+  if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) return;
+  e.respondWith(
+    fetch(e.request).then(res => {
+      const copy = res.clone();
+      caches.open(CACHE).then(c => c.put(e.request, copy));
+      return res;
+    }).catch(() => caches.match(e.request).then(hit => hit || caches.match('index.html')))
+  );
 });
