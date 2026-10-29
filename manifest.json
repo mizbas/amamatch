@@ -1,0 +1,13 @@
+{
+  "name": "あまあまマッチ",
+  "short_name": "あまあまマッチ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#7b3fa0",
+  "theme_color": "#4a1f5c",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
